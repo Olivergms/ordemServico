@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using OrdemServico.Infra.Database;
+using OrdemServico.Infra.Database.Context;
 using OrdemServico.Service;
 using OrdemServico.Service.Services;
 
@@ -30,6 +32,11 @@ app.UseSwaggerUI(op =>
     op.SwaggerEndpoint("/openapi/v1.json", "Ordem de Servico Api");
 });
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<MyContext>();
+    dbContext.Database.Migrate();
+}
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
